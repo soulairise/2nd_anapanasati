@@ -35,19 +35,19 @@ const BOWLS = {
     masterGain: 0.32,
     // [주파수 배열, 상대 게인(0~1), 감쇠 시간(초)]
     groups: [
-      { freqs: [86.3, 87.0],     gains: [0.65, 0.50], decay: 10.0 },
-      { freqs: [258.4, 259.4],   gains: [0.45, 0.45], decay: 8.0 },
-      { freqs: [502.7, 505.7, 516.8], gains: [0.20, 0.18, 0.60], decay: 6.5 },
-      { freqs: [809.3, 812.5, 815.7], gains: [0.05, 0.70, 0.05], decay: 5.0 },
+      { freqs: [86.3, 87.0],     gains: [0.65, 0.50], decay: 16.0 },
+      { freqs: [258.4, 259.4],   gains: [0.45, 0.45], decay: 13.0 },
+      { freqs: [502.7, 505.7, 516.8], gains: [0.20, 0.18, 0.60], decay: 10.0 },
+      { freqs: [809.3, 812.5, 815.7], gains: [0.05, 0.70, 0.05], decay: 8.0 },
     ],
   },
   exhale: {
     masterGain: 0.30,
     groups: [
-      { freqs: [129.5, 130.5],     gains: [0.65, 0.50], decay: 10.0 },
-      { freqs: [387.6, 389.1],     gains: [0.45, 0.45], decay: 8.0 },
-      { freqs: [754.1, 758.5, 775.2], gains: [0.20, 0.18, 0.60], decay: 6.5 },
-      { freqs: [1214, 1218.8, 1223.6], gains: [0.05, 0.70, 0.05], decay: 5.0 },
+      { freqs: [129.5, 130.5],     gains: [0.65, 0.50], decay: 16.0 },
+      { freqs: [387.6, 389.1],     gains: [0.45, 0.45], decay: 13.0 },
+      { freqs: [754.1, 758.5, 775.2], gains: [0.20, 0.18, 0.60], decay: 10.0 },
+      { freqs: [1214, 1218.8, 1223.6], gains: [0.05, 0.70, 0.05], decay: 8.0 },
     ],
   },
 }
@@ -70,7 +70,7 @@ export function strikeSingingBowl(type = 'inhale') {
   const masterGain = ac.createGain()
   masterGain.gain.setValueAtTime(1e-5, now)
   masterGain.gain.linearRampToValueAtTime(bowl.masterGain, now + 0.015)
-  masterGain.gain.exponentialRampToValueAtTime(1e-5, now + 12.0)
+  masterGain.gain.exponentialRampToValueAtTime(1e-5, now + 20.0)
   masterGain.connect(ac.destination)
 
   bowl.groups.forEach((group) => {
@@ -113,7 +113,7 @@ export function strikeSingingBowl(type = 'inhale') {
 
   activePlayers.add(player)
   const cleanup = () => activePlayers.delete(player)
-  setTimeout(cleanup, 15000)
+  setTimeout(cleanup, 25000)
 
   return player
 }
