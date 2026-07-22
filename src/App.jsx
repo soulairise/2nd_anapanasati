@@ -1,0 +1,62 @@
+import { Routes, Route, Navigate } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import { useAuth } from './context/AuthContext'
+import Home from './pages/Home'
+import Learn from './pages/Learn'
+import StageDetail from './pages/StageDetail'
+import Breathe from './pages/Breathe'
+import SessionComplete from './pages/SessionComplete'
+import Journal from './pages/Journal'
+import JournalDetail from './pages/JournalDetail'
+import Login from './pages/Login'
+import './App.css'
+
+// 로그인 필요한 라우트 보호
+function Protected({ children }) {
+  const { user, loading } = useAuth()
+  if (loading) return <div className="page container">불러오는 중…</div>
+  if (!user) return <Navigate to="/login" replace />
+  return children
+}
+
+export default function App() {
+  return (
+    <>
+      <Navbar />
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/learn" element={<Learn />} />
+          <Route path="/learn/:id" element={<StageDetail />} />
+          <Route path="/breathe" element={<Breathe />} />
+          <Route path="/complete" element={<SessionComplete />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/journal"
+            element={
+              <Protected>
+                <Journal />
+              </Protected>
+            }
+          />
+          <Route
+            path="/journal/:id"
+            element={
+              <Protected>
+                <JournalDetail />
+              </Protected>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+      <footer className="site-footer">
+        <div className="container">
+          <p className="faint">
+            숨결의 길 · Ānāpānasati Path — 들숨과 날숨, 그 사이의 알아차림
+          </p>
+        </div>
+      </footer>
+    </>
+  )
+}
