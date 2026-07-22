@@ -109,6 +109,20 @@ export default function Breathe() {
   const orbScale = isInhale ? 1.35 : isExhale ? 0.7 : phaseIdx === 1 ? 1.35 : 0.7
   const currentPhaseSec = pattern.phases[phaseIdx] || 1
 
+  const orbBg =
+    phaseIdx === 0
+      ? 'radial-gradient(circle at 35% 30%, #b5c4ad, var(--sage) 70%)'
+      : phaseIdx === 1
+        ? 'radial-gradient(circle at 35% 30%, #a1b898, var(--sage-deep) 70%)'
+        : phaseIdx === 2
+          ? 'radial-gradient(circle at 35% 30%, #d4bfaa, var(--clay) 70%)'
+          : 'radial-gradient(circle at 35% 30%, #c9b09a, var(--clay-deep) 70%)'
+
+  const orbShadow =
+    phaseIdx <= 1
+      ? 'rgba(138, 154, 130, 0.4)'
+      : 'rgba(191, 163, 138, 0.4)'
+
   return (
     <div className="page">
       <div className="container container--narrow breathe-wrap">
@@ -160,6 +174,8 @@ export default function Breathe() {
                 className="breath-orb"
                 style={{
                   transform: `scale(${orbScale})`,
+                  background: orbBg,
+                  boxShadow: `0 0 60px ${orbShadow}`,
                   transitionDuration: `${currentPhaseSec}s`,
                 }}
               >
