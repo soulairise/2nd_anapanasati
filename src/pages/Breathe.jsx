@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { getStage } from '../data/stages'
+import { strikeSingingBowl, stopAllSingingBowls } from '../lib/singingBowl'
 
 // 호흡 패턴: [들숨, 멈춤, 날숨, 멈춤] (초)
 const PATTERNS = [
@@ -27,6 +28,7 @@ export default function Breathe() {
 
   const tickRef = useRef(null)
   const startRef = useRef(null)
+  const prevGroupRef = useRef(null)
 
   // 유효 페이즈만 (0초 페이즈는 건너뜀)
   const activePhases = pattern.phases
@@ -36,10 +38,15 @@ export default function Breathe() {
   useEffect(() => {
     if (!running) return
 
+    stopAllSingingBowls()
+
     let curr = 0
     setPhaseIdx(activePhases[0].idx)
     setPhaseRemain(activePhases[0].sec)
     let remain = activePhases[0].sec
+
+    strikeSingingBowl('inhale')
+    prevGroupRef.current = 'inhale'
 
     tickRef.current = setInterval(() => {
       remain -= 1
@@ -47,13 +54,22 @@ export default function Breathe() {
 
       if (remain <= 0) {
         curr = (curr + 1) % activePhases.length
+        const newIdx = activePhases[curr].idx
         remain = activePhases[curr].sec
-        setPhaseIdx(activePhases[curr].idx)
+        setPhaseIdx(newIdx)
+
+        const newGroup = newIdx <= 1 ? 'inhale' : 'exhale'
+        if (prevGroupRef.current !== newGroup) {
+          strikeSingingBowl(newGroup)
+          prevGroupRef.current = newGroup
+        }
       }
       setPhaseRemain(remain)
     }, 1000)
 
-    return () => clearInterval(tickRef.current)
+    return () => {
+      clearInterval(tickRef.current)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [running])
 

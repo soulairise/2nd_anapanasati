@@ -6,5 +6,5 @@ import react from '@vitejs/plugin-react'
 // 저장소 이름이 정해지면 아래 base 값을 '/<repo-name>/'로 수정.
 export default defineConfig({
   plugins: [react()],
-  base: '/anapanasati/',
+  base: '/2nd_anapanasati/',
 })
